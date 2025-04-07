@@ -1,13 +1,19 @@
 # College Placement Management System
 
 ## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [User Roles](#user-roles)
-- [Installation](#installation)
-- [Contributors](#contributors)
+- [College Placement Management System](#college-placement-management-system)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Features](#features)
+  - [Tech Stack](#tech-stack)
+  - [Project Structure](#project-structure)
+  - [User Roles](#user-roles)
+  - [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+    - [Clone the Repository](#clone-the-repository)
+    - [Backend Setup](#backend-setup)
+    - [Frontend Setup](#frontend-setup)
+  - [Contributors](#contributors)
 
 ## Introduction
 The **College Placement Management System** is a web application designed to streamline and digitize the placement process in colleges and universities. Developed by final year students of **Rizvi College of Engineering**, the system features a multi-role platform catering to students, TPO (Training and Placement Officer), management, and super admin. It aims to minimize manual efforts, improve transparency, and provide real-time tracking of the placement cycle.
@@ -83,8 +89,8 @@ The **College Placement Management System** is a web application designed to str
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/moinmn/college-placement-management-system.git
-cd college-placement-management-system
+git clone https://github.com/debashisparidame/CareerConnect.git
+cd careerconnect
 ```
 
 ### Backend Setup
@@ -130,8 +136,5 @@ cd college-placement-management-system
    ```
 
 ## Contributors
-- **Member 1**: [Moin MN](https://www.linkedin.com/in/moinnaik/)
-- **Member 2**: Rafat Muskan Shaikh
-- **Member 3**: Saquib Patel
-- **Member 4**: Neeraj Kumar
+- Debashis Parida
 
