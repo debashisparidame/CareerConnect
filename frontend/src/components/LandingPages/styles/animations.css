@@ -1,0 +1,113 @@
+@keyframes running-text {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes textAnimate {
+  0% {
+    background-position: 0% 50%;
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes fadeInLetters {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gentleGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes letterFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-text {
+  background: linear-gradient(to right, #ff0000, #00ff00, #0000ff, #ff0000);
+  background-size: 200% auto;
+  animation: gradient 3s linear infinite;
+}
+
+.slide-in {
+  animation: running-text 1.5s ease-out forwards;
+}
+
+.animate-career-connect {
+  display: inline-block;
+  background: linear-gradient(90deg, 
+    #FF3366,  /* Pink */
+    #FF9933,  /* Orange */
+    #33CC33,  /* Green */
+    #3366FF   /* Blue */
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.animate-career-connect span {
+  display: inline-block;
+  opacity: 0;
+  animation: letterFadeIn 0.5s ease-out forwards;
+}
+
+/* Individual letter colors */
+.animate-career-connect span:nth-child(1) { color: #FF3366; } /* C */
+.animate-career-connect span:nth-child(2) { color: #FF9933; } /* a */
+.animate-career-connect span:nth-child(3) { color: #33CC33; } /* r */
+.animate-career-connect span:nth-child(4) { color: #3366FF; } /* e */
+.animate-career-connect span:nth-child(5) { color: #9933FF; } /* e */
+.animate-career-connect span:nth-child(6) { color: #FF3366; } /* r */
+.animate-career-connect span:nth-child(7) { color: #FF9933; } /* C */
+.animate-career-connect span:nth-child(8) { color: #33CC33; } /* o */
+.animate-career-connect span:nth-child(9) { color: #3366FF; } /* n */
+.animate-career-connect span:nth-child(10) { color: #9933FF; } /* n */
+.animate-career-connect span:nth-child(11) { color: #FF3366; } /* e */
+.animate-career-connect span:nth-child(12) { color: #FF9933; } /* c */
+.animate-career-connect span:nth-child(13) { color: #33CC33; } /* t */

@@ -1,0 +1,19 @@
+@keyframes colorChange {
+  0% { background-image: linear-gradient(to right, #ef4444, #3b82f6, #9333ea); }
+  50% { background-image: linear-gradient(to right, #3b82f6, #9333ea, #ef4444); }
+  100% { background-image: linear-gradient(to right, #9333ea, #ef4444, #3b82f6); }
+}
+
+@keyframes slideText {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-text {
+  animation: colorChange 5s linear infinite;
+  background-size: 200% auto;
+}
+
+.slide-in {
+  animation: slideText 1s ease-out forwards;
+}
