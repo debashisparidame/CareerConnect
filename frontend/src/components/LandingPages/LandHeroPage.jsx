@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import HeroImg from '../../assets/heroImg.jpg';
 import { useNavigate } from 'react-router-dom';
-import './styles/animations.css'; // Now correctly points to the CSS file
+import './styles/animations.css';
 
 function LandingHeroPage() {
   const navigate = useNavigate();

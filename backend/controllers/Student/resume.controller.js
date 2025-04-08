@@ -36,6 +36,9 @@ const UploadResume = async (req, res) => {
       folder: "CPMS/Resume",
       public_id: uniqueFilename,
     });
+    
+      
+
 
     // Update resume path in MongoDB
     user.studentProfile.resume = cloudinaryResponse.secure_url;

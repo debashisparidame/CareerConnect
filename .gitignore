@@ -1,5 +1,64 @@
-backend/*.env
+# Dependencies
+node_modules/
+**/node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+*.env
+
+# Build outputs
+/build
+/dist
+/out
+*.bundle.js
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+/coverage
+.nyc_output
+junit.xml
+
+# Backend specific
 backend/node_modules
+backend/*.env
+backend/dist
+backend/coverage
+backend/logs
 backend/Extra
 
+# Frontend specific
 frontend/node_modules
+frontend/build
+frontend/dist
+frontend/.cache
+frontend/coverage
+frontend/.env*
+
+# Misc
+.cache/
+.temp/
+*.bak
+*.tmp
+*.temp
+.vercel
+.netlify

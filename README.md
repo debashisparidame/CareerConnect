@@ -1,140 +1,153 @@
-# College Placement Management System
+# 🎓 CareerConnect
 
-## Table of Contents
-- [College Placement Management System](#college-placement-management-system)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Features](#features)
-  - [Tech Stack](#tech-stack)
-  - [Project Structure](#project-structure)
-  - [User Roles](#user-roles)
-  - [Installation](#installation)
-    - [Prerequisites](#prerequisites)
-    - [Clone the Repository](#clone-the-repository)
-    - [Backend Setup](#backend-setup)
-    - [Frontend Setup](#frontend-setup)
-  - [Contributors](#contributors)
+[![Made with React](https://img.shields.io/badge/Made%20with-React-61DAFB.svg)](https://reactjs.org/)
+[![Node.js Version](https://img.shields.io/badge/Node.js->=14.0.0-339933.svg)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4.4+-47A248.svg)](https://www.mongodb.com/)
 
-## Introduction
-The **College Placement Management System** is a web application designed to streamline and digitize the placement process in colleges and universities. Developed by final year students of **Rizvi College of Engineering**, the system features a multi-role platform catering to students, TPO (Training and Placement Officer), management, and super admin. It aims to minimize manual efforts, improve transparency, and provide real-time tracking of the placement cycle.
+## 📚 Overview
+CareerConnect is a comprehensive placement management system designed to revolutionize the campus recruitment process. Built with modern tech stack, it offers a seamless interface for students, TPOs, management, and administrators.
 
-## Features
-- **Student Portal**: Register and login, update profile, upload resume, view available job opportunities, apply for jobs, and track application status.
-- **TPO Admin Portal**: Post and manage job listings, approve/reject student applications, schedule interviews, upload offer letters.
-- **Management Admin Portal**: Access analytics, monitor placement stats, and view comprehensive reports.
-- **Super Admin Portal**: Full control of the system including onboarding TPOs and management users, managing system configurations.
-- **Cloudinary Integration**: Handles secure storage of profile pictures, resumes, and offer letters.
+## 🚀 Key Features
 
-## Tech Stack
-- **Frontend**: Vite + React.js, Tailwind CSS, Bootstrap
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB
-- **Authentication**: JSON Web Tokens (JWT)
+### For Students
+- 📝 Smart Profile Management
+- 📄 Resume Builder & Manager
+- 🎯 Intelligent Job Matching
+- 📊 Real-time Application Tracking
+- 📅 Interview Scheduler
+
+### For TPO Admins
+- 💼 Advanced Job Posting Interface
+- 👥 Candidate Management Dashboard
+- 📨 Automated Communication System
+- 📋 Interview Coordination Tools
+- 📬 Offer Letter Management
+
+### For Management
+- 📈 Advanced Analytics Dashboard
+- 🎯 Placement Performance Metrics
+- 📊 Custom Report Generation
+- 🔍 Trend Analysis Tools
+
+### For Super Admin
+- ⚙️ System Configuration Control
+- 👥 User Role Management
+- 🔐 Security Settings
+- 🔄 System Backup & Restore
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **Framework**: React 18 with Vite
+- **Styling**: Tailwind CSS 3.0, Bootstrap 5
+- **State Management**: Context API
+- **Routing**: React Router v6
+- **HTTP Client**: Axios
+
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB with Mongoose
+- **Authentication**: JWT
 - **File Storage**: Cloudinary
-- **Styling**: Tailwind CSS, Bootstrap
+- **API Documentation**: Swagger
 
-## Project Structure
-```plaintext
-├── frontend
-│   ├── public
-│   ├── src
-│   │   ├── api
-│   │   ├── assets
-│   │   ├── components
-│   │   │   ├── LandingPages
-│   │   │   └── students
-│   │   ├── config
-│   │   │   └── backend_url.js      # Contains: export const BASE_URL = 'https://cpms-api.vercel.app';
-│   │   ├── context
-│   │   ├── hooks
-│   │   ├── pages
-│   │   ├── styles
-│   │   ├── utility
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── .gitignore
-│   ├── .eslint.config.js
-│   ├── index.html
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── postcss.config.js
-│   ├── tailwind.config.js
-│   └── vite.config.js
-├── backend
-│   ├── config
-│   ├── controllers
-│   ├── middleware
-│   ├── models
-│   ├── routes
-│   ├── .env (NOTE: YOU NEED TO CREATE THIS FILE)
-│   ├── .gitignore
-│   ├── index.js
-│   ├── package.json
-│   └── package-lock.json
-└── README.md
-```
-
-## User Roles
-- **Students**: View and apply for jobs, update profile, track status, and upload resumes.
-- **TPO Admin**: Post jobs, manage applications, upload offer letters, and schedule interviews.
-- **Management Admin**: Access dashboards and reports for data-driven decision making.
-- **Super Admin**: Manage system settings, and create/manage TPO and Management users.
-
-## Installation
+## 🔧 Installation & Setup
 
 ### Prerequisites
-- Node.js and npm installed
-- MongoDB installed and running
-- Cloudinary account for file uploads
-
-### Clone the Repository
 ```bash
-git clone https://github.com/debashisparidame/CareerConnect.git
-cd careerconnect
+Node.js >= 14.0.0
+MongoDB >= 4.4
+npm >= 6.14.0
 ```
 
-### Backend Setup
-1. Navigate to the `backend` folder:
-   ```bash
-   cd backend
-   ```
-2. Install the necessary packages:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file for environment variables:
-   ```env
-   PORT=4518
-   MONGO_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret
-   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-   CLOUDINARY_API_KEY=your_cloudinary_api_key
-   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-   ```
-4. Start the backend server:
-   ```bash
-   npm start
-   ```
+### Quick Start
 
-### Frontend Setup
-1. Navigate to the `frontend` folder:
-   ```bash
-   cd frontend
-   ```
-2. Install the necessary packages:
-   ```bash
-   npm install
-   ```
-3. Change backend URL for local testing:
-   Go to `src/config/backend_url.js` and update:
-   ```js
-   export const BASE_URL = 'http://localhost:4518';
-   ```
-4. Start the frontend development server:
-   ```bash
-   npm run dev
-   ```
+1. **Clone & Install**
+```bash
+git clone https://github.com/debashisparidame/CareerConnect.git
+cd CareerConnect
+```
 
-## Contributors
-- Debashis Parida
+2. **Backend Setup**
+```bash
+cd backend
+npm install
+
+# Create .env file
+echo PORT=4518 >> .env
+echo MONGO_URI=your_mongodb_uri >> .env
+echo JWT_SECRET=your_secret >> .env
+echo CLOUDINARY_CLOUD_NAME=your_cloud_name >> .env
+echo CLOUDINARY_API_KEY=your_api_key >> .env
+echo CLOUDINARY_API_SECRET=your_api_secret >> .env
+
+# Start Server
+npm start
+```
+
+3. **Frontend Setup**
+```bash
+cd frontend
+npm install
+
+# Configure Backend URL
+# Edit src/config/backend_url.js
+# Set BASE_URL = 'http://localhost:4518'
+
+# Start Development Server
+npm run dev
+```
+
+## 🌐 Environment Configuration
+
+### Backend (.env)
+```env
+PORT=4518
+MONGO_URI=mongodb://localhost:27017/careerconnect
+JWT_SECRET=your_secure_secret_key
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+## 📦 Project Structure
+```plaintext
+CareerConnect/
+├── frontend/                # React application
+│   ├── src/
+│   │   ├── api/            # API integration
+│   │   ├── components/     # Reusable components
+│   │   ├── context/        # Global state management
+│   │   ├── hooks/         # Custom React hooks
+│   │   └── pages/         # Route components
+└── backend/                # Node.js server
+    ├── controllers/       # Business logic
+    ├── models/           # Database schemas
+    ├── routes/           # API endpoints
+    └── middleware/       # Custom middleware
+```
+
+## 🔑 API Security
+- JWT-based authentication
+- Rate limiting
+- CORS protection
+- Request validation
+- Error handling middleware
+
+## 🤝 Contributing
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/NewFeature`)
+3. Commit changes (`git commit -am 'Add NewFeature'`)
+4. Push to branch (`git push origin feature/NewFeature`)
+5. Open Pull Request
+
+## 👨‍💻 Core Team
+- **Debashis Parida** - _Project Lead & Full Stack Developer_
+
+## 📄 License
+This project is licensed under the MIT License
+
+---
+*Built with ❤️ by Debashis Parida*
 
