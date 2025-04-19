@@ -42,7 +42,7 @@ function LandingPage() {
         <LandingNavbar />
         <LandingHeroPage />
         {/* <LandingAbout /> */}
-        <LandFooter />
+        {/* <LandFooter /> */}
       </div>
 
     </>

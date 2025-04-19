@@ -67,6 +67,31 @@
   }
 }
 
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes float-fast {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes bounce-delayed {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
 .animate-text {
   background: linear-gradient(to right, #ff0000, #00ff00, #0000ff, #ff0000);
   background-size: 200% auto;
@@ -111,3 +136,23 @@
 .animate-career-connect span:nth-child(11) { color: #FF3366; } /* e */
 .animate-career-connect span:nth-child(12) { color: #FF9933; } /* c */
 .animate-career-connect span:nth-child(13) { color: #33CC33; } /* t */
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 6s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: float-fast 4s ease-in-out infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s infinite ease-in-out;
+}
+
+.animate-bounce-delayed {
+  animation: bounce-delayed 2.5s infinite ease-in-out 0.7s;
+}

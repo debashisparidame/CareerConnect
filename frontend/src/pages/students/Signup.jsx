@@ -25,6 +25,7 @@ function Signup() {
   const [toastMessage, setToastMessage] = useState('');
 
   const [error, setError] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   // useState for from data 
   const [formData, setFormData] = useState({
@@ -70,9 +71,10 @@ function Signup() {
 
     if (formData?.number?.length !== 10) return setError({ ...error, number: 'Number Length Should be 10 digital only!' })
 
+    setIsLoading(true);
+    
     try {
       const response = await axios.post(`${BASE_URL}/student/signup`, formData);
-      // console.log(response.data);
       setToastMessage("User Created Successfully! Now You Can Login.");
       setShowToast(true);
 
@@ -81,15 +83,13 @@ function Signup() {
         toastMessagePass: "User Created Successfully! Now You Can Login."
       }
       navigate('../student/login', { state: dataToPass });
-
-      // after 3sec to go login page
-      // setTimeout(() => navigate("../student/login"), 2000);
     } catch (error) {
-      if (error.response.data.msg) {
+      if (error.response?.data?.msg) {
         setToastMessage(error.response.data.msg);
         setShowToast(true);
       }
       console.log("Student Signup.jsx => ", error);
+      setIsLoading(false);
     }
   }
 
@@ -102,7 +102,7 @@ function Signup() {
 
   return (
     <>
-      {/* for any message "toast" */}
+      {/* Toast notification */}
       <Toast
         show={showToast}
         onClose={() => setShowToast(false)}
@@ -111,77 +111,258 @@ function Signup() {
         position="bottom-end"
       />
 
-      <div className="flex justify-center items-center py-2 min-h-screen bg-gradient-to-r from-red-400 from-10% via-pink-300 via-40% to-purple-300 to-100% ">
-        <form className="form-signin flex justify-center items-center flex-col gap-3 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-8 w-1/3 max-lg:w-2/3 max-md:w-3/4 max-[400px]:w-4/5" onSubmit={handleSubmit}>
-          <div className='flex flex-col items-center justify-center'>
-            <img className="mb-4 rounded-xl w-30 h-28 lg:w-30 lg:h-40" src={`${Logo}`} alt="Logo Image" />
-            <h1 className="mb-3 h3 font-weight-normal">Sign Up as a Student</h1>
-          </div>
-          <div className="w-full">
-            <label htmlFor="inputName" className="sr-only">Name</label>
-            <input type="text" id="inputName" className="ml-1 form-control" placeholder="Name" autoFocus="" fdprocessedid="gwlj3s" autoComplete='Name' name='first_name' value={first_name} onChange={handleChange} />
-            <div className="ml-2 text-red-500">
-              <span>{error?.first_name}</span>
-            </div>
-          </div>
-          <div className="w-full">
-            <label htmlFor="inputEmail" className="sr-only">Email Address</label>
-            <input type="email" id="inputEmail" className="ml-1 form-control" placeholder="Email Address" autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
-            <div className="ml-2 text-red-500">
-              <span>{error?.email}</span>
-            </div>
-          </div>
-          <div className="w-full">
-            <label htmlFor="inputNumber" className="sr-only">Phone Number</label>
-            <input
-              type="number"
-              id="inputNumber"
-              className="ml-1 form-control"
-              placeholder="Phone Number"
-              autoFocus=""
-              fdprocessedid="gwlj3s"
-              autoComplete='number'
-              name='number'
-              value={number}
-              onChange={handleChange}
-              onInput={(e) => {
-                if (e.target.value > 10) {
-                  e.target.value = e.target.value.slice(0, 10);
-                }
-              }}
-            />
-            <div className="ml-2 text-red-500">
-              <span>{error?.number}</span>
+      {/* Full height/width container with no scrolling */}
+      <div className="fixed inset-0 w-screen h-screen overflow-hidden">
+        <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-cyan-600 to-blue-800">
+          {/* Background decorative elements - with contained positioning */}
+          <div className="absolute inset-0 overflow-hidden">
+            {/* Smaller and better positioned decorative elements */}
+            <div className="absolute w-40 h-40 rounded-full -top-20 -right-10 bg-cyan-500 opacity-20"></div>
+            <div className="absolute bg-blue-500 rounded-full w-36 h-36 top-20 -left-5 opacity-10"></div>
+            <div className="absolute rounded-full w-28 h-28 bottom-10 right-5 bg-sky-400 opacity-15"></div>
+            <div className="absolute bg-blue-600 rounded-full -bottom-16 -left-5 w-44 h-44 opacity-10"></div>
+            
+            {/* Floating elements - smaller */}
+            <div className="absolute hidden w-6 h-6 bg-white rounded-full md:block top-1/4 left-1/4 opacity-20 animate-float-slow"></div>
+            <div className="absolute hidden w-5 h-5 bg-white rounded-full md:block bottom-1/3 right-1/4 opacity-15 animate-float-medium"></div>
+            <div className="absolute hidden w-4 h-4 bg-white rounded-full md:block top-1/2 left-1/5 opacity-10 animate-float-fast"></div>
+            
+            {/* Wave pattern with strict overflow control */}
+            <div className="absolute bottom-0 left-0 right-0 h-16 overflow-hidden opacity-20">
+              <div className="w-full overflow-hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full" preserveAspectRatio="none">
+                  <path fill="#ffffff" fillOpacity="1" d="M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,117.3C672,96,768,96,864,112C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                </svg>
+              </div>
             </div>
           </div>
 
-          <div className="w-full">
-            <div className="flex items-center justify-center w-full">
-              <label htmlFor="inputPassword" className="sr-only">Password</label>
-              <input type={`${isEyeOpen ? "text" : "password"}`} id="inputPassword" className="form-control" placeholder="Password" fdprocessedid="9sysne" autoComplete='current-password' name='password' value={password} onChange={handleChange} />
-              <i className={`${isEyeOpen ? "fa-solid fa-eye" : "fa-regular fa-eye-slash"} -ml-6 cursor-pointer`} onClick={handleEye}></i>
-            </div>
-            <div className="ml-2 text-red-500">
-              <span>{error?.password}</span>
-            </div>
-          </div>
+          {/* Signup card - square shaped */}
+          <div className="z-10 w-full max-w-[320px] mx-auto">
+            <div className="overflow-hidden border rounded-md shadow-xl border-white/20 bg-white/10 backdrop-blur-xl">
+              <div className="relative">
+                {/* Header with adjusted padding for square proportion */}
+                <div className="px-4 pt-4 pb-8 bg-gradient-to-r from-cyan-500 to-blue-600">
+                  <div className="flex justify-center">
+                    <div className="p-2 rounded-md shadow-lg bg-white/20 backdrop-blur-sm">
+                      <img 
+                        className="object-contain w-auto h-12" 
+                        src={Logo} 
+                        alt="CareerConnect Logo"
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Wave separator */}
+                <div className="absolute left-0 right-0 overflow-hidden -bottom-1">
+                  <div className="overflow-hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full" preserveAspectRatio="none">
+                      <path fill="#ffffff" fillOpacity="0.15" d="M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,117.3C672,96,768,96,864,112C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Form section with adjusted height to make the card more square */}
+              <div className="px-5 py-4 bg-white/15">
+                <h1 className="mb-3 text-base font-bold text-center text-white">
+                  Student Registration
+                </h1>
+                
+                <form onSubmit={handleSubmit} className="space-y-2.5">
+                  {/* Name Field */}
+                  <div>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i className="text-xs fas fa-user text-white/60"></i>
+                      </div>
+                      <input
+                        type="text"
+                        id="inputName"
+                        name="first_name"
+                        value={first_name}
+                        onChange={handleChange}
+                        className={`w-full pl-9 pr-3 py-2 text-xs bg-white/10 border ${
+                          error?.first_name ? 'border-red-400' : 'border-white/20'
+                        } rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-1 focus:ring-cyan-400`}
+                        placeholder="Full Name"
+                        autoComplete="name"
+                        autoFocus
+                      />
+                    </div>
+                    {error?.first_name && (
+                      <p className="pl-1 mt-0.5 text-[10px] text-red-300">
+                        {error.first_name}
+                      </p>
+                    )}
+                  </div>
 
-          <div className="flex flex-col items-center justify-center">
-            <button
-              className="btn btn-primary btn-block"
-              type="submit"
-            >
-              Sign Up
-            </button>
+                  {/* Email Field */}
+                  <div>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i className="text-xs fas fa-envelope text-white/60"></i>
+                      </div>
+                      <input
+                        type="email"
+                        id="inputEmail"
+                        name="email"
+                        value={email}
+                        onChange={handleChange}
+                        className={`w-full pl-9 pr-3 py-2 text-xs bg-white/10 border ${
+                          error?.email ? 'border-red-400' : 'border-white/20'
+                        } rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-1 focus:ring-cyan-400`}
+                        placeholder="Email Address"
+                        autoComplete="email"
+                      />
+                    </div>
+                    {error?.email && (
+                      <p className="pl-1 mt-0.5 text-[10px] text-red-300">
+                        {error.email}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Phone Number Field */}
+                  <div>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i className="text-xs fas fa-phone text-white/60"></i>
+                      </div>
+                      <input
+                        type="text"
+                        id="inputNumber"
+                        name="number"
+                        value={number}
+                        onChange={handleChange}
+                        onInput={(e) => {
+                          e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                        }}
+                        className={`w-full pl-9 pr-3 py-2 text-xs bg-white/10 border ${
+                          error?.number ? 'border-red-400' : 'border-white/20'
+                        } rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-1 focus:ring-cyan-400`}
+                        placeholder="Phone Number (10 digits)"
+                        autoComplete="tel"
+                      />
+                    </div>
+                    {error?.number && (
+                      <p className="pl-1 mt-0.5 text-[10px] text-red-300">
+                        {error.number}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Password Field */}
+                  <div>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i className="text-xs fas fa-lock text-white/60"></i>
+                      </div>
+                      <input
+                        type={isEyeOpen ? "text" : "password"}
+                        id="inputPassword"
+                        name="password"
+                        value={password}
+                        onChange={handleChange}
+                        className={`w-full pl-9 pr-8 py-2 text-xs bg-white/10 border ${
+                          error?.password ? 'border-red-400' : 'border-white/20'
+                        } rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-1 focus:ring-cyan-400`}
+                        placeholder="Password"
+                        autoComplete="new-password"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleEye}
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 transition-colors text-white/60 hover:text-white"
+                      >
+                        <i className={`${isEyeOpen ? "fa-solid fa-eye" : "fa-regular fa-eye-slash"} text-xs`}></i>
+                      </button>
+                    </div>
+                    {error?.password && (
+                      <p className="pl-1 mt-0.5 text-[10px] text-red-300">
+                        {error.password}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Password requirements - more compact for better square ratio */}
+                  <div className="p-2 text-[10px] rounded-md bg-white/5 text-white/70">
+                    <p className="text-[10px] font-medium text-white/80">Password must include:</p>
+                    <div className="grid grid-cols-2 gap-x-1 gap-y-0.5 mt-1 pl-2">
+                      <div className={`flex items-center ${password.length >= 8 ? 'text-green-300' : ''}`}>
+                        <span className="mr-0.5">•</span>8+ characters
+                      </div>
+                      <div className={`flex items-center ${/[A-Z]/.test(password) ? 'text-green-300' : ''}`}>
+                        <span className="mr-0.5">•</span>Uppercase
+                      </div>
+                      <div className={`flex items-center ${/[a-z]/.test(password) ? 'text-green-300' : ''}`}>
+                        <span className="mr-0.5">•</span>Lowercase
+                      </div>
+                      <div className={`flex items-center ${/\d/.test(password) ? 'text-green-300' : ''}`}>
+                        <span className="mr-0.5">•</span>Number
+                      </div>
+                      <div className={`flex items-center col-span-2 ${/[@$!%*?&]/.test(password) ? 'text-green-300' : ''}`}>
+                        <span className="mr-0.5">•</span>Special (@$!%*?&)
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Submit Button - adjusted for better square proportions */}
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className={`w-full py-2.5 mt-2 text-xs bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-md shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-1 focus:ring-cyan-500 ${
+                      isLoading ? 'opacity-70 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    {isLoading ? (
+                      <div className="flex items-center justify-center">
+                        <svg className="w-3 h-3 mr-1.5 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Creating account...
+                      </div>
+                    ) : (
+                      <>
+                        <i className="mr-1.5 text-xs fas fa-user-plus"></i>
+                        Sign Up
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                {/* Login option - with adjusted spacing for square proportions */}
+                <div className="mt-3 text-center">
+                  <p className="text-[11px] text-white/80">
+                    Already have an account?{' '}
+                    <button 
+                      onClick={() => navigate('../student/login')}
+                      className="font-semibold transition-colors text-cyan-300 hover:text-white"
+                    >
+                      Log In
+                    </button>
+                  </p>
+                </div>
+
+                {/* Footer - with adjusted spacing for square proportions */}
+                <div className="pt-3 mt-3 text-center border-t border-white/10">
+                  <button 
+                    onClick={() => navigate('/')}
+                    className="flex items-center justify-center mx-auto text-[11px] transition-colors text-white/60 hover:text-white"
+                  >
+                    <i className="mr-0.5 fas fa-home text-[11px]"></i>
+                    <span className="text-[11px] hover:underline">© CareerConnect {new Date().getFullYear()}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          <span className='text-center'>Already having account?
-            <span className='px-1 font-bold text-blue-500 cursor-pointer' onClick={() => navigate('../student/login')}>Login</span>
-          </span>
-          <p className="text-center text-gray-400 text-muted"><span className="font-semibold text-violet-600">© CareerConnect 2025</span></p>
-        </form>
+        </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Signup
+export default Signup;

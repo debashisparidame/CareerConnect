@@ -1,44 +1,32 @@
-import React, { useEffect, useState } from 'react'
-import Accordion from 'react-bootstrap/Accordion';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Form from 'react-bootstrap/Form';
 import axios from 'axios';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import { Button } from 'react-bootstrap';
-import UploadOfferLetter from './UploadOfferLetter';
 import Toast from '../Toast';
 import ModalBox from '../Modal';
-import { LiaEye } from "react-icons/lia";
-import { PiEyeClosed } from "react-icons/pi";
+import UploadOfferLetter from './UploadOfferLetter';
 import { BASE_URL } from '../../config/backend_url';
+import { 
+  FaBuilding, FaSpinner, FaUser, FaEnvelope, FaPhone, FaIdCard, 
+  FaBriefcase, FaCalendarAlt, FaSave, FaTrashAlt, FaFileAlt, 
+  FaCheck, FaTimes, FaChevronDown, FaEye 
+} from 'react-icons/fa';
 
 function UpdateJobStatus() {
   document.title = 'CareerConnect | Update Job Application Status';
   const navigate = useNavigate();
-
   const { jobId } = useParams();
 
   const [data, setData] = useState({});
   const [company, setCompany] = useState(null);
-  // for applicants of job 
   const [applicant, setApplicant] = useState({});
-  // useState for load data
   const [currentUser, setCurrentUser] = useState({});
-
   const [loading, setLoading] = useState(true);
-
-  // useState for toast display
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
-
-  // for hovering on eye
   const [eyeIsHover, setEyeIsHover] = useState(false);
-
-  // useState for Modal display
   const [showModal, setShowModal] = useState(false);
-
-  // check if hired 
   const [isHired, setHired] = useState(false);
+  const [activeSection, setActiveSection] = useState('both');
 
   const closeModal = () => setShowModal(false);
 
@@ -77,18 +65,18 @@ function UpdateJobStatus() {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           }
         }
-      )
+      );
       setData(response.data);
     } catch (error) {
       if (error.response) {
-        if (error?.response.data?.msg) setToastMessage(error.response.data.msg)
-        else setToastMessage(error.message)
+        if (error?.response.data?.msg) setToastMessage(error.response.data.msg);
+        else setToastMessage(error.message);
         setShowToast(true);
         if (error?.response?.data?.msg === "job data not found") navigate('../404');
       }
       console.log("Error while fetching details => ", error);
     }
-  }
+  };
 
   const fetchCompanyData = async () => {
     try {
@@ -97,21 +85,17 @@ function UpdateJobStatus() {
     } catch (error) {
       console.log("AddCompany error while fetching => ", error);
     }
-  }
+  };
 
   const fetchJobDetailsOfApplicant = async () => {
     if (data?.applicants?.length !== 0) {
-      // Find if the student user has applied
-
       const appliedApplicant = await data.applicants.find(app => app.studentId === currentUser.id);
-      // console.log(appliedApplicant)
-      if (appliedApplicant) setApplicant(appliedApplicant) // If no applicant found, navigate to 404
+      if (appliedApplicant) setApplicant(appliedApplicant);
       else navigate('../404');
 
-      // if status is hired then set hired and show package input
       if (appliedApplicant.status === 'hired') setHired(true);
     }
-  }
+  };
 
   const handleSubmit = async () => {
     if (applicant?.status === 'hired' && !applicant?.package) {
@@ -120,15 +104,10 @@ function UpdateJobStatus() {
       return;
     }
     try {
-      // console.log(applicant);
       const response = await axios.post(`${BASE_URL}/student/update-status/${jobId}/${currentUser.id}`, { applicant });
-      // console.log(response.data);
       if (response?.data?.msg) {
         setToastMessage(response?.data?.msg);
         setShowToast(true);
-        // Fetch updated applicant data to ensure state is current
-        // await fetchJobDetail();
-        // await fetchJobDetailsOfApplicant();
       }
     } catch (error) {
       if (error?.response?.data?.msg) {
@@ -137,7 +116,7 @@ function UpdateJobStatus() {
       }
       console.log("Error while update job status => ", error);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -161,39 +140,31 @@ function UpdateJobStatus() {
     fetchData();
   }, [currentUser?.id, data?.company, jobId]);
 
-  // console.log(applicant)
-
   const handleApplicantChange = (e) => {
     setApplicant({
       ...applicant,
       [e.target.name]: e.target.value
     });
 
-    if (e.target.name === 'status' && e.target.value === 'hired') setHired(true)
-    if (e.target.name === 'status' && e.target.value !== 'hired') setHired(false)
-  }
+    if (e.target.name === 'status' && e.target.value === 'hired') setHired(true);
+    if (e.target.name === 'status' && e.target.value !== 'hired') setHired(false);
+  };
 
-
-  // for formating date of birth
   const formatDate = (isoString) => {
     if (!isoString || isoString === "undefined") return "";
     const date = new Date(isoString);
     return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
   };
 
-
   const handleDelete = () => setShowModal(true);
 
-  // delete offer letter 
   const confirmDelete = async () => {
     try {
       const response = await axios.post(`${BASE_URL}/student/delete-offer-letter/${jobId}/${currentUser.id}`, { applicant });
-      // console.log(response.data);
       if (response?.data?.msg) {
         setToastMessage(response?.data?.msg);
         setShowToast(true);
         setShowModal(false);
-        // Fetch updated applicant data to ensure state is current
         await fetchJobDetail();
         await fetchJobDetailsOfApplicant();
       }
@@ -205,12 +176,33 @@ function UpdateJobStatus() {
       setShowModal(false);
       console.log("Error while update job status => ", error);
     }
-  }
+  };
+
+  // Helper function to get status badge styling
+  const getStatusBadge = (status) => {
+    switch(status) {
+      case 'passed':
+        return "bg-green-100 text-green-800 border-green-200";
+      case 'failed':
+        return "bg-red-100 text-red-800 border-red-200";
+      case 'pending':
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case 'applied':
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case 'interview':
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      case 'hired':
+        return "bg-emerald-100 text-emerald-800 border-emerald-200";
+      case 'rejected':
+        return "bg-red-100 text-red-800 border-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
 
   return (
     <>
-      {/*  any message here  */}
-      < Toast
+      <Toast
         show={showToast}
         onClose={() => setShowToast(false)}
         message={toastMessage}
@@ -218,257 +210,293 @@ function UpdateJobStatus() {
         position="bottom-end"
       />
 
-      {
-        loading ? (
-          <div className="flex items-center justify-center h-72">
-            <i className="text-3xl fa-solid fa-spinner fa-spin" />
+      <div className="px-4 py-6 bg-gray-50 min-h-[90vh]">
+        <div className="max-w-5xl mx-auto">
+          {/* Page Header */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-gray-800">Update Application Status</h1>
+            <p className="mt-1 text-sm text-gray-600">
+              Keep your job application status updated and track your progress
+            </p>
           </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-2 gap-2 my-6 text-base max-sm:grid-cols-1 max-sm:text-sm">
-              <div className="flex flex-col gap-2">
-                <div className="">
-                  {/* Basic Details  */}
-                  <Accordion defaultActiveKey={['0']} alwaysOpen className='w-full rounded shadow max-sm:w-fit'>
-                    <Accordion.Item eventKey="0">
-                      <Accordion.Header>Basic Details</Accordion.Header>
-                      <Accordion.Body>
-                        <div className="">
-                          {/* company name  */}
-                          <div className="flex flex-col justify-between py-2">
-                            {/* Basic Info */}
-                            <div className="flex justify-between">
-                              <div className="space-y-4">
-                                <div>
-                                  <span className="font-bold text-gray-700">Full Name: </span>
-                                  <span className="font-bold text-blue-500">
-                                    {currentUser?.first_name + " "}
-                                    {currentUser?.middle_name && currentUser?.middle_name + " "}
-                                    {currentUser?.last_name}
-                                  </span>
-                                </div>
 
-                                <div>
-                                  <span className="font-bold text-gray-700">Email: </span>
-                                  <span className="font-bold text-blue-500">
-                                    {currentUser?.email}
-                                  </span>
-                                </div>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center h-64">
+              <FaSpinner className="w-12 h-12 text-blue-500 animate-spin" />
+              <p className="mt-4 text-lg font-medium text-blue-600">Loading application data...</p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {/* Job Overview Card */}
+              <div className="p-6 overflow-hidden bg-white shadow-sm rounded-xl">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center">
+                    <div className="flex items-center justify-center w-12 h-12 text-white bg-blue-600 rounded-lg">
+                      <FaBriefcase className="w-6 h-6" />
+                    </div>
+                    <div className="ml-4">
+                      <h2 className="text-xl font-bold text-gray-800">{data?.jobTitle}</h2>
+                      <div className="flex items-center mt-1">
+                        <FaBuilding className="w-4 h-4 text-gray-500" />
+                        <span className="ml-2 text-sm text-gray-600">{company?.companyName}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`px-3 py-1.5 text-sm font-medium border rounded-full ${getStatusBadge(applicant?.status || 'applied')}`}>
+                    {applicant?.status ? applicant.status.charAt(0).toUpperCase() + applicant.status.slice(1) : 'Applied'}
+                  </div>
+                </div>
 
-                                <div>
-                                  <span className="font-bold text-gray-700">Number: </span>
-                                  <span className="font-bold text-blue-500">
-                                    {currentUser?.number}
-                                  </span>
-                                </div>
+                {/* Tab Navigation */}
+                <div className="flex mb-6 border-b border-gray-200">
+                  <button 
+                    className={`px-4 py-2 text-sm font-medium -mb-px ${activeSection === 'both' || activeSection === 'profile' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                    onClick={() => setActiveSection('profile')}
+                  >
+                    Profile Information
+                  </button>
+                  <button 
+                    className={`px-4 py-2 text-sm font-medium -mb-px ${activeSection === 'both' || activeSection === 'application' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                    onClick={() => setActiveSection('application')}
+                  >
+                    Application Status
+                  </button>
+                </div>
 
-                                {
-                                  currentUser?.uin && (
-                                    <div>
-                                      <span className="font-bold text-gray-700">UIN: </span>
-                                      <span className="font-bold text-blue-500">
-                                        {currentUser?.uin}
-                                      </span>
-                                    </div>
-                                  )
-                                }
-                                <div>
-                                  <span className="font-bold text-gray-700">Company Name: </span>
-                                  <span className="font-bold text-blue-500">
-                                    {company?.companyName}
-                                  </span>
-                                </div>
-                                <div>
-                                  <span className="font-bold text-gray-700">Job Title: </span>
-                                  <span className="font-bold text-blue-500">
-                                    {data?.jobTitle}
-                                  </span>
-                                </div>
-                              </div>
+                {/* Content Sections */}
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  {/* Basic Info Section */}
+                  {(activeSection === 'both' || activeSection === 'profile') && (
+                    <div className="p-4 rounded-lg bg-gray-50">
+                      <h3 className="mb-4 text-sm font-medium text-gray-500 uppercase">Personal Information</h3>
+
+                      <div className="space-y-3">
+                        <div className="flex">
+                          <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full">
+                            <FaUser className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <div className="ml-3">
+                            <p className="text-xs font-medium text-gray-500">Full Name</p>
+                            <p className="text-sm font-medium text-gray-800">
+                              {currentUser?.first_name + " "}
+                              {currentUser?.middle_name && currentUser?.middle_name + " "}
+                              {currentUser?.last_name}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex">
+                          <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full">
+                            <FaEnvelope className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <div className="ml-3">
+                            <p className="text-xs font-medium text-gray-500">Email</p>
+                            <p className="text-sm font-medium text-gray-800">{currentUser?.email}</p>
+                          </div>
+                        </div>
+
+                        <div className="flex">
+                          <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full">
+                            <FaPhone className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <div className="ml-3">
+                            <p className="text-xs font-medium text-gray-500">Phone</p>
+                            <p className="text-sm font-medium text-gray-800">{currentUser?.number}</p>
+                          </div>
+                        </div>
+
+                        {currentUser?.uin && (
+                          <div className="flex">
+                            <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full">
+                              <FaIdCard className="w-4 h-4 text-blue-600" />
+                            </div>
+                            <div className="ml-3">
+                              <p className="text-xs font-medium text-gray-500">UIN</p>
+                              <p className="text-sm font-medium text-gray-800">{currentUser?.uin}</p>
                             </div>
                           </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Application Status Section */}
+                  {(activeSection === 'both' || activeSection === 'application') && (
+                    <div className="p-4 rounded-lg bg-gray-50">
+                      <h3 className="mb-4 text-sm font-medium text-gray-500 uppercase">Application Status</h3>
+                      
+                      <div className="space-y-4">
+                        {/* Current Round */}
+                        <div>
+                          <label className="block mb-1 text-xs font-medium text-gray-700">Current Round</label>
+                          <select
+                            name="currentRound"
+                            value={applicant?.currentRound || "undefined"}
+                            onChange={handleApplicantChange}
+                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500"
+                          >
+                            <option disabled value="undefined">Select Current Round</option>
+                            <option value="Aptitude Test">Aptitude Test</option>
+                            <option value="Technical Interview">Technical Interview</option>
+                            <option value="HR Interview">HR Interview</option>
+                            <option value="Group Discussion">Group Discussion</option>
+                          </select>
                         </div>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
-                </div>
-              </div>
-              <div className="">
-                {/* Job details  */}
-                <Accordion defaultActiveKey={['1']} alwaysOpen className='w-full rounded shadow max-sm:w-fit'>
-                  <Accordion.Item eventKey="1">
-                    <Accordion.Header>Job Details</Accordion.Header>
-                    <Accordion.Body>
-                      <div className="">
-                        <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
-                          {/* current round  */}
-                          <FloatingLabel controlId="floatingSelectCurrentRound" label="Current Round">
-                            <Form.Select
-                              aria-label="Floating label select current round"
-                              className='cursor-pointer'
-                              name='currentRound'
-                              value={applicant?.currentRound || "undefined"}
-                              onChange={handleApplicantChange}
-                            >
-                              <option disabled value="undefined" className='text-gray-400'>Enter Current Round</option>
-                              <option value="Aptitude Test">Aptitude Test</option>
-                              <option value="Technical Interview">Technical Interview</option>
-                              <option value="HR Interview">HR Interview</option>
-                              <option value="Group Discussion">Group Discussion</option>
-                            </Form.Select>
-                          </FloatingLabel>
-                          {/* round status  */}
-                          <FloatingLabel controlId="floatingSelectRoundStatus" label="Round Status">
-                            <Form.Select
-                              aria-label="Floating label select round status"
-                              className='cursor-pointer'
-                              name='roundStatus'
-                              value={applicant?.roundStatus || "undefined"}
-                              onChange={handleApplicantChange}
-                            >
-                              <option disabled value="undefined" className='text-gray-400'>Enter Round Status</option>
-                              <option value="pending">Pending</option>
-                              <option value="passed">Passed</option>
-                              <option value="failed">Failed</option>
-                            </Form.Select>
-                          </FloatingLabel>
-                          {/* selection date */}
-                          <FloatingLabel controlId="floatingSelectionDate" label="Selection Date">
-                            <Form.Control
+
+                        {/* Round Status */}
+                        <div>
+                          <label className="block mb-1 text-xs font-medium text-gray-700">Round Status</label>
+                          <select
+                            name="roundStatus"
+                            value={applicant?.roundStatus || "undefined"}
+                            onChange={handleApplicantChange}
+                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500"
+                          >
+                            <option disabled value="undefined">Select Round Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="passed">Passed</option>
+                            <option value="failed">Failed</option>
+                          </select>
+                        </div>
+
+                        {/* Selection Date */}
+                        <div>
+                          <label className="block mb-1 text-xs font-medium text-gray-700">Selection Date</label>
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                              <FaCalendarAlt className="text-gray-400" />
+                            </div>
+                            <input
                               type="date"
-                              placeholder="Selection Date"
-                              name='selectionDate'
+                              name="selectionDate"
                               value={formatDate(applicant?.selectionDate)}
                               onChange={handleApplicantChange}
+                              className="w-full py-2 pl-10 pr-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500"
                             />
-                          </FloatingLabel>
-                          {/* joining date */}
-                          <FloatingLabel controlId="floatingJoiningDate" label="Joining Date">
-                            <Form.Control
+                          </div>
+                        </div>
+
+                        {/* Joining Date */}
+                        <div>
+                          <label className="block mb-1 text-xs font-medium text-gray-700">Joining Date</label>
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                              <FaCalendarAlt className="text-gray-400" />
+                            </div>
+                            <input
                               type="date"
-                              placeholder="Joining Date"
-                              name='joiningDate'
+                              name="joiningDate"
                               value={formatDate(applicant?.joiningDate)}
                               onChange={handleApplicantChange}
+                              className="w-full py-2 pl-10 pr-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500"
                             />
-                          </FloatingLabel>
-                          <div className="flex flex-col items-center justify-center gap-2">
-
-                            {/* offer letter upload */}
-                            {/* sending jobId and function update applicant useState  */}
-                            <UploadOfferLetter jobId={jobId} fetchJobDetailsOfApplicant={fetchJobDetailsOfApplicant} />
-                            {
-                              applicant?.offerLetter &&
-                              <div className="flex items-center justify-between gap-1 cursor-pointer w-fit">
-                                <span
-                                  className='px-3 py-1 transition duration-300 ease-in-out bg-blue-500 rounded hover:bg-blue-700'
-                                  onMouseEnter={() => setEyeIsHover(true)}
-                                  onMouseLeave={() => setEyeIsHover(false)}
-                                >
-                                  <a
-                                    className='flex items-center justify-center text-white no-underline'
-                                    target="_blanck"
-                                    href={BASE_URL + applicant?.offerLetter}
-                                  >
-                                    {
-                                      eyeIsHover ? (
-                                        <PiEyeClosed className='pr-2 text-3xl' />
-                                      ) : (
-                                        <LiaEye className='pr-2 text-3xl' />
-                                      )
-                                    }
-                                    View Now
-                                  </a>
-                                </span>
-                                {/* delete offer letter  */}
-                                <span
-                                  className='px-3 py-1 text-white transition-all duration-200 bg-red-500 rounded hover:bg-red-700'
-                                  onClick={handleDelete}
-                                  onMouseEnter={(e) => {
-                                    const icon = e.target.querySelector('i');
-                                    icon.classList.remove('fa-regular');
-                                    icon.classList.add('fa-solid');
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    const icon = e.target.querySelector('i');
-                                    icon.classList.add('fa-regular');
-                                    icon.classList.remove('fa-solid');
-                                  }}
-                                >
-                                  <i
-                                    className="py-1 pr-2 text-lg fa-regular fa-trash-can"
-                                  />
-                                  Delete
-                                </span>
-                              </div>
-                            }
                           </div>
-                          {/* job status  */}
-                          <FloatingLabel controlId="floatingSelectJobStatus" label="Job Status">
-                            <Form.Select
-                              aria-label="Floating label select job status"
-                              className='cursor-pointer'
-                              name='status'
-                              value={applicant?.status || "undefined"}
+                        </div>
+
+                        {/* Job Status */}
+                        <div>
+                          <label className="block mb-1 text-xs font-medium text-gray-700">Job Status</label>
+                          <select
+                            name="status"
+                            value={applicant?.status || "undefined"}
+                            onChange={handleApplicantChange}
+                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500"
+                          >
+                            <option disabled value="undefined">Select Job Status</option>
+                            <option value="applied">Applied</option>
+                            <option value="interview">Interview</option>
+                            <option value="hired">Hired</option>
+                            <option value="rejected">Rejected</option>
+                          </select>
+                        </div>
+
+                        {/* Package Offered - Only shown when status is hired */}
+                        {isHired && (
+                          <div>
+                            <label className="block mb-1 text-xs font-medium text-gray-700">
+                              Package Offered (LPA) <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="number"
+                              name="package"
+                              step="0.01"
+                              placeholder="Enter package in LPA"
+                              value={applicant?.package || ""}
                               onChange={handleApplicantChange}
-                            >
-                              <option disabled value="undefined" className='text-gray-400'>Enter Job Status</option>
-                              <option value="applied">Applied</option>
-                              <option value="interview">Interview</option>
-                              <option value="hired">Hired</option>
-                              <option value="rejected">Rejected</option>
-                            </Form.Select>
-                          </FloatingLabel>
-                          {
-                            isHired === true && (
-                              <div className="col-span-2">
-                                {/* selection date */}
-                                <FloatingLabel controlId="floatingPackage" label={
-                                  <>
-                                    <span>Enter Package Offered <span className='text-red-500'>*</span></span>
-                                  </>
-                                }>
-                                  <Form.Control
-                                    type="number"
-                                    step={0.01}
-                                    placeholder="Enter Package Offered"
-                                    name='package'
-                                    value={applicant?.package}
-                                    onChange={handleApplicantChange}
-                                    required
-                                  />
-                                </FloatingLabel>
-                              </div>
-                            )
-                          }
-                        </div>
-                        <div className="mt-3 mb-2">
-                          <Button variant="primary" onClick={handleSubmit}>
-                            <i className="pr-2 fa-solid fa-floppy-disk" />
-                            Update
-                          </Button>
-                        </div>
+                              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500"
+                              required
+                            />
+                          </div>
+                        )}
                       </div>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
+                    </div>
+                  )}
+                </div>
+
+                {/* Offer Letter Section */}
+                <div className="p-4 mt-6 rounded-lg bg-gray-50">
+                  <h3 className="mb-4 text-sm font-medium text-gray-500 uppercase">Offer Letter</h3>
+                  
+                  <div className="flex flex-col items-start space-y-4">
+                    <UploadOfferLetter jobId={jobId} fetchJobDetailsOfApplicant={fetchJobDetailsOfApplicant} />
+                    
+                    {applicant?.offerLetter && (
+                      <div className="flex flex-wrap gap-3 mt-2">
+                        <a
+                          href={BASE_URL + applicant?.offerLetter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center px-4 py-2 text-sm font-medium text-white transition bg-blue-600 rounded-md hover:bg-blue-700"
+                        >
+                          <FaEye className="mr-2" />
+                          View Offer Letter
+                        </a>
+                        
+                        <button
+                          onClick={handleDelete}
+                          className="flex items-center px-4 py-2 text-sm font-medium text-white transition bg-red-600 rounded-md hover:bg-red-700"
+                        >
+                          <FaTrashAlt className="mr-2" />
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex justify-end mt-6">
+                  <button
+                    onClick={() => navigate('/student/job-listings')}
+                    className="px-4 py-2 mr-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSubmit}
+                    className="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                  >
+                    <FaSave className="mr-2" />
+                    Update Status
+                  </button>
+                </div>
               </div>
             </div>
-          </>
-        )
-      }
+          )}
+        </div>
+      </div>
 
-      {/* ModalBox Component for Delete Confirmation */}
+      {/* Modal for confirmation */}
       <ModalBox
         show={showModal}
         close={closeModal}
-        header={"Confirmation"}
-        body={`Do you want to delete offer letter?`}
-        btn={"Delete"}
+        header={"Delete Confirmation"}
+        body={"Are you sure you want to delete this offer letter? This action cannot be undone."}
+        btn={"Delete Permanently"}
         confirmAction={confirmDelete}
       />
     </>
-  )
+  );
 }
 
-export default UpdateJobStatus
+export default UpdateJobStatus;
